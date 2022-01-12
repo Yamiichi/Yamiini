@@ -1,12 +1,19 @@
-const Discord = require('discord.js');
+const Discord = require("discord.js");
+const { SlashCommandBuilder } = require("@discordjs/builders");
 const config = require("./config.json");
-const bot = new Discord.Client();
+const Client = new Discord.Client({
+    intents: [
+        Discord.Intents.FLAGS.GUILDS,
+        Discord.Intents.FLAGS.GUILD_MESSAGES
+    ]
+});
 
-const fs = require('fs');
+const fs = require("fs");
+const message = require("./Events/message");
 
-bot.login(config["TOKEN"]);
+Client.login(config["TOKEN"]);
 
-bot.commands = new Discord.Collection();
+Client.commands = new Discord.Collection();
 
 fs.readdir("./Commandes/", (error, f) => {
     if(error) console.log(error);
@@ -19,7 +26,7 @@ fs.readdir("./Commandes/", (error, f) => {
         let commande = require(`./Commandes/${f}`);
         console.log(`${f} commande chargée !`);
 
-        bot.commands.set(commande.help.name, commande);
+        Client.commands.set(commande.help.name, commande);
     });
 });
 
@@ -30,6 +37,39 @@ fs.readdir("./Events/", (error, f) => {
     f.forEach((f) => {
         const events = require(`./Events/${f}`);
         const event = f.split(".")[0];
-        bot.on(event, events.bind(null, bot));
+        Client.on(event, events.bind(null, Client));
     });
 });
+
+const data = new SlashCommandBuilder()
+    .setName("ping")
+    .setDescription("revoie pong")
+    .addUserOption(option => option
+        .setName("utilisateur")
+        .setDescription("utilisateur que vous souhaitez mentionner")
+        .setRequired(false));
+
+Client.on("ready", () => {
+    //? Pour tout les serv
+    //? Client.application.commands.create(data);
+
+    Client.guilds.cache.get("696347975563083808").commands.create(data);
+
+    console.log("bot opérationnel");
+    
+});
+
+Client.on("interactionCreate", interaction => {
+    if (interaction.isCommand()) {
+        if (interaction.commandName === "ping") {
+            let user = interaction.options.getUser("utilisateur");
+
+            if (user != undefined) {
+                interaction.reply(`pong <@${user.id}>`)
+            }
+            else{
+                interaction.reply("pong");
+            }
+        }
+    }
+})

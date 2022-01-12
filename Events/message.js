@@ -1,19 +1,20 @@
 const Discord = require("discord.js");
-const config = require("./config.json");
+const config = require("../config.json");
 
-module.exports = async(bot, message) => {
+module.exports = async(client, message) => {
+    const prefix = config["prefix"];
 
-    if(message.author.bot) return;
+    if(message.author.client) return;
     if(message.channel.type === "dm") return;
 
     if(!message.content.startsWith(prefix)) return;
 
-    const args = message.content.slice(config["prefix"].length).trim().split(/ +/g);
+    const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const commande = args.shift();
 
-    const cmd = bot.commands.get(commande);
+    const cmd = client.commands.get(commande);
 
     if(!cmd) return;
 
-    cmd.run(bot, message, args);
+    cmd.run(client, message, args);
 };

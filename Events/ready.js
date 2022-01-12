@@ -1,6 +1,8 @@
-module.exports = async(client) => {
+const { MessageEmbed, MessageReaction } = require("discord.js");
 
-    client.user.setPresence({
+module.exports = async(Client) => {
+
+    Client.user.setPresence({
         activity: {
             name: "trouver sa raison de vivre"
         }
