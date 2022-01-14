@@ -11,12 +11,12 @@ module.exports = class YamiiniClient extends AkairoClient {
         },
         partials: ['CHANNEL', 'GUILD_MEMBER', 'MESSAGE', 'REACTION', 'USER'],
         presence: {
-          status: 'dnd',
+          status: 'online',
           activities: [{
-            name: 'Développement en cours...',
-            type: 'CUSTOM',
-            url: ''
+            name: 'my mum in the bathroom',
+            type: 'WATCHING'
           }]
+          
         },
         intents: 32767
       }
