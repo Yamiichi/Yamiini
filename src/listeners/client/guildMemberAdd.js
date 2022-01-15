@@ -1,6 +1,6 @@
 const { Listener } = require('discord-akairo');
 
-class ReadyListener extends Listener {
+class GuildMemberAddListener extends Listener {
     constructor() {
         super('guildMemberAdd', {
             emitter: 'client',
@@ -9,8 +9,8 @@ class ReadyListener extends Listener {
     }
 
     exec(member) {
-        console.log(`Bonjour je suis ${member}`);
+        console.log(`Bonjour je suis ${member.user.username}.`);
     }
 }
 
-module.exports = ReadyListener;
+module.exports = GuildMemberAddListener;

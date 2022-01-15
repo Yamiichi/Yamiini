@@ -41,10 +41,6 @@ module.exports = class YamiiniClient extends AkairoClient {
     this.functions = {
       embed: embed
     }
-
-    this.commandHandler.loadAll();
-    this.commandHandler.useListenerHandler(this.listenerHandle);
-    this.listenerHandler.loadAll();
   }
 
   init() {
