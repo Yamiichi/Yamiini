@@ -10,6 +10,12 @@ class UserInfoCommand extends Command {
       ignorePermissions: '491489639434289153',
       userPermissions: 'KICK_MEMBERS',
       clientPermissions: 'KICK_MEMBERS',
+      category: 'Misc',
+      description: {
+        content: 'La commande userinfo renvoie des informations des utilisateurs.',
+        usage: 'user(info) <member>',
+        examples: ['userinfo', 'info @member']
+      },
       ratelimit: 2,
       cooldown: 5000,
       typing: false,

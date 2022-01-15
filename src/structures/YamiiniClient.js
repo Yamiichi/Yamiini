@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { embed } = require('../util/functions');
 const { TOKEN, MONGOSTRING } = require('../util/config');
+const { GuildsProvider } = require('../structures/Providers')
 const {AkairoClient, CommandHandler, ListenerHandler} = require("discord-akairo");
 
 module.exports = class YamiiniClient extends AkairoClient {
@@ -37,10 +38,8 @@ module.exports = class YamiiniClient extends AkairoClient {
       directory: './src/listeners'
     });
 
-    // this.functions.embed()
-    this.functions = {
-      embed: embed
-    }
+    this.functions = { embed: embed }
+    this.guildSettings = new GuildsProvider();
   }
 
   init() {

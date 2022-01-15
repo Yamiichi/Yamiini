@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Yamiichi/Yamiini#readme",
   "dependencies": {
     "axios": "^0.24.0",
+    "common-tags": "^1.8.2",
     "discord-akairo": "github:SkyBlockDev/discord-akairo",
     "discord.js": "^13.0.0",
     "moment": "^2.29.1",

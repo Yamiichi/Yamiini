@@ -11,7 +11,12 @@ module.exports = class EvalCommand extends Command {
   constructor() {
     super('eval', {
       aliases: ['eval'],
-      category: 'dev',
+      category: 'Dev',
+      description: {
+        content: '',
+        usage: '',
+        examples: ['']
+      },
       ownerOnly: true,
       args: [
         {
