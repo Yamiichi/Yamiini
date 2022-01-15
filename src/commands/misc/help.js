@@ -60,7 +60,7 @@ class HelpCommand extends Command {
 
     ${prefix} = prefix du bot.
     () = alias | <> = argument(s) optionnel(s) | [] = argument(s) obligatoire.
-    Les caractères ne sont pas a inclure dans vos commandes.
+    Les caractères ne sont pas à inclure dans vos commandes.
     \`\`\``);
   }
 }
