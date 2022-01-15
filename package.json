@@ -21,6 +21,7 @@
     "axios": "^0.24.0",
     "discord-akairo": "github:SkyBlockDev/discord-akairo",
     "discord.js": "^13.0.0",
-    "moment": "^2.29.1"
+    "moment": "^2.29.1",
+    "mongoose": "^6.1.6"
   }
 }
