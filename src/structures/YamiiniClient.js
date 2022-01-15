@@ -1,4 +1,5 @@
-const {AkairoClient, CommandHandler} = require("discord-akairo");
+const { embed } = require('../util/functions');
+const {AkairoClient, CommandHandler, ListenerHandler} = require("discord-akairo");
 
 module.exports = class YamiiniClient extends AkairoClient {
   constructor(config = {}) {
@@ -17,6 +18,7 @@ module.exports = class YamiiniClient extends AkairoClient {
             type: 'WATCHING'
           }]
           
+          
         },
         intents: 32767
       }
@@ -29,6 +31,17 @@ module.exports = class YamiiniClient extends AkairoClient {
       directory: './src/commands/'
     });
 
+    this.listenerHandler = new ListenerHandler(this, {
+      directory: './src/listeners'
+    });
+
+    // this.functions.embed()
+    this.functions = {
+      embed: embed
+    }
+
     this.commandHandler.loadAll();
+    this.commandHandler.useListenerHandler(this.listenerHandle);
+    this.listenerHandler.loadAll();
   }
 }

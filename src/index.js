@@ -1,8 +1,8 @@
-const YamiiniClient = require('./stuctures/YamiiniClient');
-const config = require("./config.json");
+const { TOKEN } = require('./util/config');
+const YamiiniClient = require('./structures/YamiiniClient');
 
-let Client = new YamiiniClient({
+let client = new YamiiniClient({
   prefix: 'Y$'
-})
+});
 
-Client.login(config["TOKEN"]);
+client.login(TOKEN);
