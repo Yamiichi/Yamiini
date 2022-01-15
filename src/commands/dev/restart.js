@@ -10,14 +10,12 @@ class RestartCommand extends Command {
         usage: 'restart',
         examples: ['restart', 'rs']
       },
-      userPermissions: 'ADMINISTRATOR',
-      ownerOnly: false
+      ownerOnly: true
     });
   }
 
   exec(message) {
     require('child_process').execSync('pm2 restart 0');
-    require('child_process').execSync('git pull');
   }
 }
 

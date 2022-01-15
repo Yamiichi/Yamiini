@@ -7,7 +7,7 @@ const { AkairoClient, CommandHandler, ListenerHandler } = require("discord-akair
 module.exports = class YamiiniClient extends AkairoClient {
   constructor(config = {}) {
     super(
-      { ownerID: ["491489639434289153", "277177665818066946"]},
+      { ownerID: ["491489639434289153", "277177665818066946"] },
       {
         allowedMentions: {
           parse: ['roles', 'everyone', 'users'],
@@ -20,8 +20,6 @@ module.exports = class YamiiniClient extends AkairoClient {
             name: 'my mum in the bathroom',
             type: 'WATCHING'
           }]
-
-
         },
         intents: 32767
       }
@@ -29,9 +27,14 @@ module.exports = class YamiiniClient extends AkairoClient {
 
     this.commandHandler = new CommandHandler(this, {
       allowMention: true,
-      prefix: config.prefix,
+      prefix: async message => {
+        const guildPrefix = await this.guildSettings.get(message.guild);
+        if (guildPrefix) return guildPrefix.prefix;
+        return config.prefix;
+      },
       defaultCooldown: 2000,
-      directory: './src/commands/'
+      directory: './src/commands/',
+      
     });
 
     this.listenerHandler = new ListenerHandler(this, {
@@ -62,6 +65,16 @@ module.exports = class YamiiniClient extends AkairoClient {
       return process.exit();
     }
   }
+
+  /*//! connectMusic() {
+    this.client.music = new ErelaClient(this.client, [
+      {
+        host: "localhost",
+        port: 8000,
+        password: "youshallnotpassword"
+      }
+    ]);
+  }*/
 
   async start() {
     await this.connect();

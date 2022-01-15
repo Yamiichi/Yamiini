@@ -15,8 +15,8 @@ class HelpCommand extends Command {
     });
   }
 
-  exec(message, args) {
-    const prefix = this.handler.prefix;
+  async exec(message, args) {
+    const prefix = await this.handler.prefix(message);
     const command = args.command;
 
     if (!command) {
