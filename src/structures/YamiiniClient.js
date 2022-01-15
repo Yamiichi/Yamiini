@@ -1,4 +1,6 @@
+const mongoose = require('mongoose');
 const { embed } = require('../util/functions');
+const { TOKEN, MONGOSTRING } = require('../util/config');
 const {AkairoClient, CommandHandler, ListenerHandler} = require("discord-akairo");
 
 module.exports = class YamiiniClient extends AkairoClient {
@@ -43,5 +45,28 @@ module.exports = class YamiiniClient extends AkairoClient {
     this.commandHandler.loadAll();
     this.commandHandler.useListenerHandler(this.listenerHandle);
     this.listenerHandler.loadAll();
+  }
+
+  init() {
+    this.commandHandler.useListenerHandler(this.listenerHandle);
+    this.commandHandler.loadAll();
+    console.log(`Commandes -> ${this.commandHandler.modules.size}`);
+    this.listenerHandler.loadAll();
+    console.log(`Listeners -> ${this.listenerHandler.modules.size}`);
+  }
+
+  async start() {
+    try {
+      await mongoose.connect(MONGOSTRING, {
+        useNewUrlParser: true,
+        useUnifiedTopoLogy: true
+      });
+      console.log("Db connecté!");
+    } catch(e) {
+      console.log("Db pas connecté! Voir erreur ci-dessous!\n\n", e);
+      return process.exit();
+    }
+    await this.init();
+    return this.login(TOKEN);
   }
 }
