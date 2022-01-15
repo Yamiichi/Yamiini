@@ -5,6 +5,12 @@ class Test extends Command {
     super('test', {
       aliases: ['test'],
       category: 'Dev',
+      description: {
+        content: 'Commande de test unitaire.\n\nEn cours de développement...',
+        usage: '',
+        examples: ['']
+      },
+      ownerOnly: true,
       channel: 'guild'
     });
   }

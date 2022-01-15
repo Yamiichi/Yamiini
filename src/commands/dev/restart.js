@@ -3,10 +3,10 @@ const { Command } = require('discord-akairo');
 class RestartCommand extends Command {
   constructor() {
     super('restart', {
-      aliases: ['restart', 'rs'],
+      aliases: [/*'restart', 'rs'*/],
       category: 'Dev',
       description: {
-        content: '',
+        content: 'En cours de développement...',
         usage: '',
         examples: ['']
       },

@@ -13,7 +13,7 @@ module.exports = class EvalCommand extends Command {
       aliases: ['eval'],
       category: 'Dev',
       description: {
-        content: '',
+        content: 'Commande lié au développement du bot.',
         usage: '',
         examples: ['']
       },
