@@ -3,6 +3,7 @@ const { embed } = require('../util/functions');
 const { TOKEN, MONGOSTRING } = require('../util/config');
 const { GuildsProvider } = require('../structures/Providers')
 const { AkairoClient, CommandHandler, ListenerHandler } = require("discord-akairo");
+const { etat } = require('../commands/test unitaire/status');
 
 module.exports = class YamiiniClient extends AkairoClient {
   constructor(config = {}) {
@@ -15,7 +16,7 @@ module.exports = class YamiiniClient extends AkairoClient {
         },
         partials: ['CHANNEL', 'GUILD_MEMBER', 'MESSAGE', 'REACTION', 'USER'],
         presence: {
-          status: 'online',
+          status: `${etat}`,
           activities: [{
             name: 'my mum in the bathroom',
             type: 'WATCHING'
@@ -32,9 +33,13 @@ module.exports = class YamiiniClient extends AkairoClient {
         if (guildPrefix) return guildPrefix.prefix;
         return config.prefix;
       },
+      status: async message => {
+        const etat = await this.guildSettings.get(message.guild);
+        if (etat) return etat.status;
+        return config.status;
+      },
       defaultCooldown: 2000,
       directory: './src/commands/',
-      
     });
 
     this.listenerHandler = new ListenerHandler(this, {

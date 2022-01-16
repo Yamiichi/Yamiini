@@ -16,7 +16,7 @@ class Test extends Command {
   }
 
   exec(message) {
-    message.channel.send();
+    message.channel.send(``);
   }
 }
 
