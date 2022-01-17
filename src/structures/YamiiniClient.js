@@ -1,9 +1,7 @@
-const mongoose = require('mongoose');
-const { embed } = require('../util/functions');
+const { AkairoClient, CommandHandler, ListenerHandler, ClientUtil } = require("discord-akairo");
 const { TOKEN, MONGOSTRING } = require('../util/config');
-const { GuildsProvider } = require('../structures/Providers')
-const { AkairoClient, CommandHandler, ListenerHandler } = require("discord-akairo");
-const { etat } = require('../commands/test unitaire/status');
+const { GuildsProvider, UsersProvider } = require('../structures/Providers')
+const mongoose = require('mongoose');
 
 module.exports = class YamiiniClient extends AkairoClient {
   constructor(config = {}) {
@@ -16,7 +14,7 @@ module.exports = class YamiiniClient extends AkairoClient {
         },
         partials: ['CHANNEL', 'GUILD_MEMBER', 'MESSAGE', 'REACTION', 'USER'],
         presence: {
-          status: `${etat}`,
+          status: 'dnd',
           activities: [{
             name: 'my mum in the bathroom',
             type: 'WATCHING'
@@ -33,11 +31,6 @@ module.exports = class YamiiniClient extends AkairoClient {
         if (guildPrefix) return guildPrefix.prefix;
         return config.prefix;
       },
-      status: async message => {
-        const etat = await this.guildSettings.get(message.guild);
-        if (etat) return etat.status;
-        return config.status;
-      },
       defaultCooldown: 2000,
       directory: './src/commands/',
     });
@@ -46,18 +39,12 @@ module.exports = class YamiiniClient extends AkairoClient {
       directory: './src/listeners'
     });
 
-    this.functions = { embed: embed }
+    this.musicPlayer = new ClientUtil(this.client).collection();
     this.guildSettings = new GuildsProvider();
+    this.userProvider = new UsersProvider();
   }
 
-  init() {
-    this.commandHandler.useListenerHandler(this.listenerHandle);
-    this.commandHandler.loadAll();
-    console.log(`Commandes -> ${this.commandHandler.modules.size}`);
-    this.listenerHandler.loadAll();
-    console.log(`Listeners -> ${this.listenerHandler.modules.size}`);
-  }
-
+  
   async connect() {
     try {
       await mongoose.connect(MONGOSTRING, {
@@ -70,16 +57,14 @@ module.exports = class YamiiniClient extends AkairoClient {
       return process.exit();
     }
   }
-
-  /*//! connectMusic() {
-    this.client.music = new ErelaClient(this.client, [
-      {
-        host: "localhost",
-        port: 8000,
-        password: "youshallnotpassword"
-      }
-    ]);
-  }*/
+  
+  init() {
+    this.commandHandler.useListenerHandler(this.listenerHandle);
+    this.commandHandler.loadAll();
+    console.log(`Commandes -> ${this.commandHandler.modules.size}`);
+    this.listenerHandler.loadAll();
+    console.log(`Listeners -> ${this.listenerHandler.modules.size}`);
+  }
 
   async start() {
     await this.connect();

@@ -1,4 +1,5 @@
 const { Guild } = require('./Models');
+const { User } = require('./Models');
 
 class GuildsProvider {
   async get(guild) {
@@ -16,4 +17,21 @@ class GuildsProvider {
   }
 }
 
-module.exports = { GuildsProvider };
+class UsersProvider {
+
+  async getUser(user) {
+    const data = await User.findOne({ id: user.id });
+    if (data) return data;
+  }
+
+  async updateUser(user, settings) {
+    let data = await this.getUser(user);
+    if (typeof data !== 'object') data = {}
+    for (const key in settings) {
+      if (data[key] !== settings[key]) data[key] = settings[key]
+    }
+    return data.updateOne(settings);
+  }
+}
+
+module.exports = { GuildsProvider, UsersProvider };

@@ -32,7 +32,7 @@ class UserInfoCommand extends Command {
   }
 
   exec(message, args) {
-    return message.channel.reply({
+    return message.channel.send({
       embeds: [
         this.client.functions.embed()
           .setTitle(`${args.member.displayName} (${args.member.id})`)

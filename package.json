@@ -4,7 +4,8 @@
   "description": "Bot discord",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lavalink": "java -jar ./lavalink/Lavalink.jar",
+    "srt": "node ./src/index"
   },
   "repository": {
     "type": "git",
@@ -22,7 +23,7 @@
     "common-tags": "^1.8.2",
     "discord-akairo": "github:SkyBlockDev/discord-akairo",
     "discord.js": "^13.0.0",
-    "erela": "^1.11.2",
+    "erela.js": "^2.3.3",
     "moment": "^2.29.1",
     "mongoose": "^6.1.6"
   }
