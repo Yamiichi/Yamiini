@@ -11,7 +11,13 @@
     "type": "git",
     "url": "git+https://github.com/Yamiichi/Yamiini.git"
   },
-  "keywords": [],
+  "keywords": [
+    "erelajs",
+    "documentation",
+    "docs",
+    "lavalink",
+    "client"
+  ],
   "author": "Dylan Languet",
   "license": "ISC",
   "bugs": {
