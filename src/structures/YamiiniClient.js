@@ -40,7 +40,7 @@ module.exports = class YamiiniClient extends AkairoClient {
       directory: './src/listeners'
     });
 
-    //this.musicPlayer = new ClientUtil(this.client).collection();
+    this.musicPlayer = new ClientUtil(this.client).collection();
     this.guildSettings = new GuildsProvider();
     this.userProvider = new UsersProvider();
     this.functions = { embed: embed };
