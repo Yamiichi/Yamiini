@@ -22,7 +22,7 @@ class HelpCommand extends Command {
     if (!command) {
       let embed = this.client.functions.embed()
         .setAuthor(
-          `Bonjour, mon nom est ${this.client.user.username}!`,
+          `${this.client.user.username} help`,
           this.client.user.displayAvatarURL()
         )
         .setDescription(`Retrouvez la liste de toutes mes commandes ci-dessous!

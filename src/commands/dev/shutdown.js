@@ -14,7 +14,7 @@ class ShutdownCommand extends Command {
     });
   }
 
-  exec(message) {
+  exec() {
     require('child_process').execSync('pm2 stop 0');
   }
 }

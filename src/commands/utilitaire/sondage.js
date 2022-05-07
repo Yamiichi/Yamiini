@@ -5,6 +5,7 @@ class Sondage extends Command{
     constructor() {
         super('sondage', {
             aliases: ['sondage', 'poll'],
+            category: 'Utilitaire',
             args: [
                 { id: 'args', match: 'content' },
             ]

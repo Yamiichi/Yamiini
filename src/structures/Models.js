@@ -24,7 +24,15 @@ const userSchema = Schema({
   }
 })
 
+const citationSchema = Schema({
+  id: String,
+  userId: String,
+  citation: String,
+  createdAt: String,
+})
+
 module.exports = {
   Guild: model('Guild', guildSchema),
-  User: model('users', userSchema)
-};
+  User: model('users', userSchema),
+  Citation: model('citations', citationSchema)
+}
