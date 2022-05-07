@@ -17,15 +17,13 @@ class ListCitation extends Command {
   }
 
   async exec(message) {
-    Citation.find({
+    Citation.findOne({
       where: {
         guildId: message.guild.id
       }
     }).then(citations => {
       if (citations.length === 0) {
-        message.channel.send(new MessageEmbed()
-          .setColor("#0000FF")
-          .setDescription(`Aucune citation n'a été trouvée.`));
+        message.channel.send(`Aucune citation n'a été trouvée.`);
       }
       else {
         const citationEmbed = new MessageEmbed()
@@ -36,7 +34,6 @@ class ListCitation extends Command {
           citationEmbed.addField(`Citation`, citations[index].citation, true);
           citationEmbed.addField('Date', citations[index].createdAt, true);
         }
-        console.log(citationEmbed);
         return message.channel.send({ embeds: [citationEmbed] });
       }
     }).catch(err => {

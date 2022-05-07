@@ -9,58 +9,31 @@ class DelCitation extends Command {
       description: {
         content: 'Commande pour supprimer une citation.',
         usage: 'delcitation <id>',
-        examples: ['delcitation 1', 'supprcitation 3']
+        examples: ['delcit 1', 'supprcitation 3']
       },
       ownerOnly: false
     });
   }
 
-  async exec(message,args) {  
-    let arg = args.args.split('');
-    let mention = message.guild(message.mentions.users.first());
-    
-    if(!mention) {
-      var response = await Citation.find({ userId : message.author.id }, (err, citations) => {
-        if (err) console.log(err);
-        if (citations.length === 0) {
-          message.channel.send('Aucune citation n\'a été trouvée.');
-        } else {
-          //let citation = citations[Math.floor(Math.random() * citations.length)];
-          const citationEmbed = new MessageEmbed()
-            .setColor("#0000FF")
-            .setAuthor(message.author.username, message.author.displayAvatarURL())
-            .setDescription(`Voici la liste des citations de \`${message.author.username}\` <a:recordspin:830936253025091654> `)
-            .setFooter(`Liste de citations`, message.author.displayAvatarURL());
-          for (let index = citations.length - 1; index >= 0; index--) {
-            citationEmbed.addField(`Id de la citation`, citations[index].id, true);
-            citationEmbed.addField(`Citation`, citations[index].citation, true);
-            citationEmbed.addField('Date', citations[index].createdAt, true);
-          }
-          message.channel.send(citationEmbed);
-        }
-      }).clone().catch(function(err){ console.log(err)});
+  async exec(message) {
+    let args = message.content.split(' ');
+    let id = args[1];
+    if (!id) {
+      return message.channel.send(`Veuillez entrer un id de citation.`);
     }
-    console.log(mention);
-    var response = await Citation.find({ userId : mention.id }, (err, citations) => {
-      if (err) console.log(err);
-      if (citations.length === 0) {
-        message.channel.send('Aucune citation n\'a été trouvée.');
-      } else {
-        //let citation = citations[Math.floor(Math.random() * citations.length)];
-        const citationEmbed = new MessageEmbed()
-          .setColor("#0000FF")
-          .setAuthor(mention.user.username, mention.user.displayAvatarURL())
-          .setDescription(`Voici la liste des citations de \`${mention.user.username}\` <a:recordspin:830936253025091654> `)
-          .setFooter(`Liste de citations`, mention.user.displayAvatarURL());
-          for (let index = citations.length - 1; index >= 0; index--) {
-            citationEmbed.addField(`Id de la citation`, citations[index].id, true);
-          citationEmbed.addField(`Citation`, citations[index].citation, true);
-          citationEmbed.addField('Date', citations[index].createdAt, true);
-        }
-        message.channel.send(citationEmbed);
+    if (id.length !== 1) {
+      return message.channel.send("L'usage n'est pas correct. Veuillez recommencer la procédure!");
+    }
+    Citation.deleteOne({id: id}).then(citation => {
+      if (citation.deletedCount === 0) {
+        return message.channel.send(`Aucune citation n'a été trouvée.`);
       }
-    }).clone().catch(function(err){ console.log(err)});
-    //return console.log(response.body);
+      else {
+        return message.channel.send(`La citation N°${id} a été supprimée.`);
+      }
+    }).catch(err => {
+      console.log(`Voici l'erreur ${err}`);
+    });
   }
 }
 
