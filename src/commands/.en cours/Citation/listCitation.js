@@ -17,6 +17,7 @@ class ListCitation extends Command {
   }
 
   async exec(message) {
+    message.channel.bulkDelete("1");
     Citation.findOne({
       where: {
         guildId: message.guild.id

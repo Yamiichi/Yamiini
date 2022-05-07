@@ -20,6 +20,7 @@ class UpdateCitation extends Command {
     let args = message.content.split(' ');
     let id = args[1];
     let citation = args.slice(2).join(' ');
+    message.channel.bulkDelete("1");
     if (!id) {
       return message.channel.send(`Veuillez entrer un id de citation.`);
     }

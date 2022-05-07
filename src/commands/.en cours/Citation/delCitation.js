@@ -18,6 +18,7 @@ class DelCitation extends Command {
   async exec(message) {
     let args = message.content.split(' ');
     let id = args[1];
+    message.channel.bulkDelete("1");
     if (!id) {
       return message.channel.send(`Veuillez entrer un id de citation.`);
     }
