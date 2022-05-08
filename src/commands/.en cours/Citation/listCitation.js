@@ -17,7 +17,27 @@ class ListCitation extends Command {
   }
 
   async exec(message) {
+    let args = message.content.split(' ');
     message.channel.bulkDelete("1");
+    Citation.find().then(citations => {
+      if (citations.length === 0) {
+        return message.channel.send(`Aucune citation n'a été trouvée.`);
+      }
+      else {
+        let embed = new MessageEmbed()
+        .setTitle("Liste des citations")
+        .setDescription(`${citations.map(citation => `${citation.id} - ${citation.citation}`).join('\n')}`)
+        .setColor("#0099ff")
+        .setTimestamp()
+
+        return message.channel.send(embed);
+      }
+    }).catch(err => {
+      console.log(`Voici l'erreur ${err}`);
+    }
+    );
+
+    /* message.channel.bulkDelete("1");
     Citation.findOne({
       where: {
         guildId: message.guild.id
@@ -39,7 +59,7 @@ class ListCitation extends Command {
       }
     }).catch(err => {
       console.log(`Voici l'erreur ${err}`);
-    });
+    }); */
   }
 }
 

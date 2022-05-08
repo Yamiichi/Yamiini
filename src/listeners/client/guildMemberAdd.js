@@ -8,8 +8,8 @@ class GuildMemberAddListener extends Listener {
         });
     }
 
-    exec(member) {
-        console.log(`Bonjour je suis ${member.user.username}.`);
+    exec(member, guild) {
+        console.log(`Bonjour je suis ${member.user.username}. J'ai rejoint ${guild.name}.`);
     }
 }
 

@@ -27,7 +27,7 @@ class AddCitation extends Command{
         let citationCount = await Citation.db.collection('citations').countDocuments();
         Citation.create({id: citationCount, userId: userId, citation: citation, createdAt: new Date().toLocaleDateString()});
         message.channel.bulkDelete("1");
-        message.channel.send(`${citation} <@${userId}> ${new Date().toLocaleDateString()}`);
+        message.channel.send(`"${citation}" <@${userId}> ${new Date().toLocaleDateString()}`);
     }
 }
 

@@ -1,5 +1,5 @@
 const { AkairoClient, CommandHandler, ListenerHandler, ClientUtil } = require("discord-akairo");
-const { TOKEN, MONGOSTRING } = require('../util/config');
+const { TOKEN, MONGOSTRING, STATUS } = require('../util/config');
 const { GuildsProvider, UsersProvider } = require('../structures/Providers')
 const mongoose = require('mongoose');
 const { embed } = require('../util/functions');
@@ -15,10 +15,10 @@ module.exports = class YamiiniClient extends AkairoClient {
         },
         partials: ['CHANNEL', 'GUILD_MEMBER', 'MESSAGE', 'REACTION', 'USER'],
         presence: {
-          status: 'dnd',
+          status: STATUS,
           activities: [{
-            name: 'my mum in the bathroom',
-            type: 'WATCHING'
+            name: 'Trancher des têtes avec sa grosse épée',
+            type: 'PLAYING'
           }]
         },
         intents: 32767
