@@ -12,12 +12,12 @@ class ListCitation extends Command {
         usage: 'liste citation',
         examples: ['list cit']
       },
-      ownerOnly: false
+      ownerOnly: false,
+      args: [{ id: 'user', type: 'mention' }]
     });
   }
 
-  async exec(message) {
-    let args = message.content.split(' ');
+  async exec(message, user) {
     message.channel.bulkDelete("1");
     Citation.find().then(citations => {
       if (citations.length === 0) {
