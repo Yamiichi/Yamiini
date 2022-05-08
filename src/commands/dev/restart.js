@@ -1,4 +1,5 @@
 const { Command } = require('discord-akairo');
+const { Options } = require('discord.js');
 
 class RestartCommand extends Command {
   constructor() {
@@ -14,7 +15,9 @@ class RestartCommand extends Command {
     });
   }
 
-  exec(message) {
+  async exec(message) {
+    this.client.user.setActivity('Redémarrage du bot...');
+    this.client.user.setStatus('idle');
     require('child_process').execSync('pm2 restart 0');
   }
 }

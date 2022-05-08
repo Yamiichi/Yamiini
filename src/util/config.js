@@ -7,5 +7,6 @@ module.exports = {
   AUTEUR: 'Yamiichi',
   DATE_CREA: '2020-04-01',
   STATUS: 'online',
+  ACTIVITY: {type: 'COMPETING', name: 'Trancher des têtes avec sa grosse épée'},
   MONGOSTRING: 'mongodb+srv://Yamiichi:Y4m11n1_31@cluster0.v7maj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
 }

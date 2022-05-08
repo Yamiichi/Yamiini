@@ -14,7 +14,9 @@ class ShutdownCommand extends Command {
     });
   }
 
-  exec() {
+  async exec() {
+    this.client.user.setActivity('Arrêt du bot...');
+    this.client.user.setStatus('idle');
     require('child_process').execSync('pm2 stop 0');
   }
 }
