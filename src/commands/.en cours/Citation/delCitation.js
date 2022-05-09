@@ -16,25 +16,28 @@ class DelCitation extends Command {
   }
 
   async exec(message) {
+    message.channel.bulkDelete("1");
     let args = message.content.split(' ');
     let id = args[1];
-    message.channel.bulkDelete("1");
     if (!id) {
       return message.channel.send(`Veuillez entrer un id de citation.`);
     }
-    if (id.length !== 1) {
-      return message.channel.send("L'usage n'est pas correct. Veuillez recommencer la procédure!");
+    let citations = await Citation.find({userId: message.author.id, edit: message.author.id});
+    for (let index = citations.length - 1; index >= 0; index--) { 
+      if (id === citations[index].id) {
+        Citation.deleteOne({id: id}).then(citation => {
+          if (citation.deletedCount === 0) {
+            return message.channel.send(`Aucune citation n'a été trouvée.`);
+          }
+          else {
+            return message.channel.send(`La citation N°${id} \`${citations[index].citation}\` a été supprimée.`);
+          }
+        }).catch(err => {
+          console.log(`Voici l'erreur ${err}`);
+        });
+      }
     }
-    Citation.deleteOne({id: id}).then(citation => {
-      if (citation.deletedCount === 0) {
-        return message.channel.send(`Aucune citation n'a été trouvée.`);
-      }
-      else {
-        return message.channel.send(`La citation N°${id} a été supprimée.`);
-      }
-    }).catch(err => {
-      console.log(`Voici l'erreur ${err}`);
-    });
+    return message.channel.send("La citation que vous vouliez supprimer n'existe pas ou ne vous appartient pas.");
   }
 }
 

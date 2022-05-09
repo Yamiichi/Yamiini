@@ -11,23 +11,26 @@ class AddCitation extends Command{
                 usage: 'cit "<citation>" <@auteur>',
                 examples: ['cit "Ce n\'est pas un problème de mon cerveau, c\'est un problème de mon coeur." @copilot', 'citation "Pierre, il sait tellement bien labourer les fesses qu\'il a été nommé meilleur agriculteur de France" @Le Mathématicien']
               },
-            args: [
-              { id: 'args', match: 'content'},
-            ]
+            ownerOnly: false,
+            args: [{ id: 'args', match: 'content'}]
         });
-    } 
+    }
 
     async exec(message, args) { 
+      if (!args.args) { return message.channel.send(`Veuillez entrer une citation.`); }
         let arg = args.args.split('"');
         if (arg.length !== 3) {
           return message.channel.send("L'usage n'est pas correct. Veuillez recommencer la procédure!");
         }
         let citation = arg[1];
-        let userId = arg[2].split('@')[1].split('>')[0];
+        let mention = message.mentions.users.first();
         let citationCount = await Citation.db.collection('citations').countDocuments();
-        Citation.create({id: citationCount, userId: userId, citation: citation, createdAt: new Date().toLocaleDateString()});
+        Citation.create({id: citationCount, userId: mention.id, citation: citation, createdAt: new Date().toLocaleDateString(), edit: message.author.id});
         message.channel.bulkDelete("1");
-        message.channel.send(`"${citation}" <@${userId}> ${new Date().toLocaleDateString()}`);
+        let embed = this.client.functions.embed()
+          .setAuthor(mention.username, mention.avatarURL())
+          .setDescription(`"${citation}" ${new Date().toLocaleDateString()}`);
+        return message.channel.send({ embeds: [embed] });
     }
 }
 

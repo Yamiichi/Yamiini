@@ -27,8 +27,9 @@ const userSchema = Schema({
 const citationSchema = Schema({
   id: String,
   userId: String,
+  edit: String,
   citation: String,
-  createdAt: String,
+  createdAt: String
 })
 
 module.exports = {
