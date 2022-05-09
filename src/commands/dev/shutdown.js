@@ -14,10 +14,11 @@ class ShutdownCommand extends Command {
     });
   }
 
-  async exec() {
+  async exec(message) {
+    message.channel.bulkDelete(1);
     this.client.user.setActivity('Arrêt du bot...');
     this.client.user.setStatus('idle');
-    require('child_process').execSync('pm2 stop 0');
+    setInterval(() => { require('child_process').execSync('pm2 stop 0')}, 1000);
   }
 }
 

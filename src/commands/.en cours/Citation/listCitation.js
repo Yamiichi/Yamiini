@@ -1,6 +1,5 @@
 const { Command } = require('discord-akairo');
 const { Citation } = require('../../../structures/Models.js');
-const { MessageEmbed } = require("discord.js");
 
 class ListCitation extends Command {
   constructor() {
@@ -10,56 +9,58 @@ class ListCitation extends Command {
       description: {
         content: 'Commande pour afficher les citations.',
         usage: 'liste citation',
-        examples: ['list cit']
+        examples: ['list cit'],
+        args: [{id: 'user', type: 'usermention'}]
       },
       ownerOnly: false,
-      args: [{ id: 'user', type: 'mention' }]
     });
   }
 
-  async exec(message, user) {
+  async exec(message) {
     message.channel.bulkDelete("1");
-    Citation.find().then(citations => {
-      if (citations.length === 0) {
-        return message.channel.send(`Aucune citation n'a été trouvée.`);
+    let user = message.content.split(' ')[1];
+    let userId = user.split('@')[1].split('>')[0];
+    let mention = message.mentions.users.first();
+    if (!user) {
+      userId = message.author.id;
+      let citations = await Citation.find({userId: userId});
+      if (citations.length !== 0) {
+        let embed = this.client.functions.embed()
+          .setAuthor(message.author.username, message.author.avatarURL())
+          .setColor("#0099ff")
+          for (let index = citations.length - 1; index >= 0; index--) {
+            embed.addField(`Id de la citation`, citations[index].id, true);
+            embed.addField(`Citation`, citations[index].citation, true);
+            embed.addField('Date', citations[index].createdAt, true);
+          }
+        return message.channel.send({ embeds: [embed] });
       }
       else {
-        let embed = new MessageEmbed()
-        .setTitle("Liste des citations")
-        .setDescription(`${citations.map(citation => `${citation.id} - ${citation.citation}`).join('\n')}`)
-        .setColor("#0099ff")
-        .setTimestamp()
-
-        return message.channel.send(embed);
+        return message.channel.send("Vous n'avez pas de citations.");
       }
-    }).catch(err => {
-      console.log(`Voici l'erreur ${err}`);
     }
-    );
-
-    /* message.channel.bulkDelete("1");
-    Citation.findOne({
-      where: {
-        guildId: message.guild.id
-      }
-    }).then(citations => {
+    else if (user && mention.id === userId ) {
+      let citations = await Citation.find({userId: userId});
       if (citations.length === 0) {
-        message.channel.send(`Aucune citation n'a été trouvée.`);
+        return message.channel.send("Cette personne n'a pas de citations.");
       }
-      else {
-        const citationEmbed = new MessageEmbed()
-          .setColor("BLACK")
-          .setDescription(`Voici la liste des citations de \`${message.author.username}\` <a:recordspin:830936253025091654> `);
-        for (let index = citations.length - 1; index >= 0; index--) {
-          citationEmbed.addField(`Id de la citation`, citations[index].id, true);
-          citationEmbed.addField(`Citation`, citations[index].citation, true);
-          citationEmbed.addField('Date', citations[index].createdAt, true);
-        }
-        return message.channel.send({ embeds: [citationEmbed] });
-      }
-    }).catch(err => {
-      console.log(`Voici l'erreur ${err}`);
-    }); */
+      let embed = this.client.functions.embed()
+          .setAuthor(mention.username, mention.avatarURL())
+          .setColor("#0099ff")
+          for (let index = citations.length - 1; index >= 0; index--) {
+            embed.addField(`Id de la citation`, citations[index].id, true);
+            embed.addField(`Citation`, citations[index].citation, true);
+            embed.addField('Date', citations[index].createdAt, true);
+          }
+        return message.channel.send({ embeds: [embed] });
+    }
+    else {
+      let embed = this.client.functions.embed()
+        .setTitle("Erreur")
+        .setColor("#0099ff")
+        .setDescription("Soit la personnne que vous avez mentionnée n'existe pas, soit elle n'a pas de citation.");
+      return message.channel.send({ embed });
+    }
   }
 }
 
