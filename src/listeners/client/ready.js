@@ -1,6 +1,7 @@
-const { MessageEmbed, Client } = require('discord.js');
-const { Listener } = require('discord-akairo');
-//const { ErelaClient } = require("erela.js");
+const { Listener } = require("discord-akairo");
+const Manager = require("erela.js");
+const Spotify = require('better-erela.js-spotify').default;
+const { embed, embedVote } = require("../../util/functions");
 
 class ReadyListener extends Listener {
     constructor() {
@@ -10,43 +11,61 @@ class ReadyListener extends Listener {
         });
     }
 
-    exec() {
-        /* const client = new Client();
-        const nodes = [{
-            host: "localhost",
-            port: 8000,
-            password: "mypassword",
-        }];
-        client.music = new ErelaClient(client, nodes)
+    async exec() {
+        const urlVoteBot = "https://top.gg/bot/696156217856491591/vote";
+        const urlInviteBot = "https://discord.com/oauth2/authorize?client_id=696156217856491591&scope=bot&permissions=0";
+        const client = this.client;
+        var trackmsg;
+
+        function setPresence() {
+            let activities = [
+                { activity: { name: `${client.guilds.cache.size.toString()} serveurs!` }, status: 'online'},
+                { activity: { name: 'l$help' }, status: 'idle'},
+                { activity: { name: 'Shingeki no Kyogin movie !' }, status: 'online'}
+            ]
+    
+            let activity = activities[Math.floor(Math.random() * activities.length)];
+            client.user.setPresence(activity);
+        }
+
+        //setInterval(setPresence(), 30000);
+
         async function setMusicEmbed(player, embed) {
             trackmsg = await player.textChannel.send(embed);
+        }
+
+        client.manager = new Manager({
+            nodes: [
+              {
+                host: 'localhost',
+                port: 2333,
+                password: 'youshallnotpass',
+              },
+            ],
+            send(id, payload) {
+              const guild = client.guilds.cache.get(id);
+              if (guild) guild.shared.send(payload);
+            },
+            plugins: [new Spotify()],
+          })
         
-        const embedVote = new MessageEmbed()
-            .setDescription(`Supportez le bot en [votant](${urlVoteBot}) ou en [l'invitant](${urlInviteBot}) Vous pouvez voter toutes les 12 h!`)
-            .setColor("#0000FF")
-            .setFooter("Vote soutien bot LUCARIO")
-            .setImage("https://d.facdn.net/art/asherthefox/1518873125/1518873125.asherthefox_lucarioocarina.png");
-        
-        this.client.music.on("nodeConnect", node => console.log("Client Erela connecté!"));
-        this.client.music.on("nodeError", (node, error) => console.log(`Node error: ${error.message}`));
-        this.client.music.on("trackStart", (player, track) => {
-            const embedPlay = new MessageEmbed()
-                .setAuthor('Musique actuelle', this.client.user.avatarURL())
+        .on('nodeConnect', (node) => console.log(`Node ${node.id} connected.`))
+        .on("nodeError", (node, error) => console.log(`Node error: ${error.message}`))
+        .on("trackStart", (player, track) => {
+            /* const embedPlay = new MessageEmbed()
+                .setAuthor('Musique actuelle', client.user.avatarURL())
                 .setDescription(` ${track.title} <a:speakers:830938408485388308>`)
                 .setColor("#0000FF")
-            setMusicEmbed(player, embedPlay);
-        });
-        this.client.music.on("trackEnd", (player, track) => {
+            setMusicEmbed(player, embedPlay); */
+        })
+        .on("trackEnd", (player, track) => {
             trackmsg.delete();
-        });
-        this.client.music.on("queueEnd", player => {
+        })
+        .on("queueEnd", player => {
             player.textChannel.send("La playlist est terminée.")
             player.textChannel.send(embedVote);
-            this.client.music.players.destroy(player.guild.id);
+            manager.players.destroy(player.guild.id);
         });
-
-        console.log('Je suis prêt');
-        } */
     }
 }
 

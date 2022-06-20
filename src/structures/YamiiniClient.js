@@ -3,6 +3,7 @@ const { TOKEN, MONGOSTRING, STATUS, ACTIVITY } = require('../util/config');
 const { GuildsProvider, UsersProvider } = require('../structures/Providers')
 const mongoose = require('mongoose');
 const { embed } = require('../util/functions');
+const manager = require('../listeners/client/manager');
 
 module.exports = class YamiiniClient extends AkairoClient {
   constructor(config = {}) {
@@ -37,7 +38,7 @@ module.exports = class YamiiniClient extends AkairoClient {
       directory: './src/listeners'
     });
 
-    this.musicPlayer = new ClientUtil(this.client).collection();
+    this.musicPlayer = manager;
     this.guildSettings = new GuildsProvider();
     this.userProvider = new UsersProvider();
     this.functions = { embed: embed };
